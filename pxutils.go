@@ -1,11 +1,12 @@
-package pxutils
+package main
 
 import (
+	"C"
 	"strconv"
 )
 
-// Create PC Variable pass in jsonstring payload and uuid:tag:ftag
-func CreatePC(jsonstring string, tag string) string {
+//export CreatePC
+func CreatePC(jsonstring string, tag string) *C.char {
 	var a = h1(jsonstring, tag)
 	var e = h12(a)
 	var r = h13(e)
@@ -14,7 +15,7 @@ func CreatePC(jsonstring string, tag string) string {
 	for i := 0; i < len(r); i += 2 {
 		pc += string(r[i])
 	}
-	return pc
+	return C.CString(pc)
 }
 
 func h1(n string, t string) string {
@@ -210,11 +211,13 @@ func h13(t string) string {
 	return n + e
 }
 
-// Simple Function to Obfuscate string using a factor
-func ObfuscateString(text string, amount int) string {
+//export ObfuscateString
+func ObfuscateString(text string, amount int) *C.char {
 	var e string = ""
 	for r := 0; r < len(text); r++ {
 		e += string(amount ^ int([]rune(text)[r]))
 	}
-	return e
+	return C.CString(e)
 }
+
+func main() {}
